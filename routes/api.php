@@ -14,29 +14,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Route::middleware('auth:sanctum')->get('/member-ship', function (Request $request) {
-//    return $request->user();
-//});
-//Route::middleware('auth:api')->prefix('v1')->group(function (){
-//    Route::get('/members',function (Request $request){
-//       return
-//    });
-//});
-//Route::group(['middleware' => \App\Http\Middleware\Authenticate::class, 'prefix' => 'v1'],
-//    function () {
-//        //Member Endpoints
-//        Route::post('/test', [\App\Http\Controllers\MembersController::class, 'testEnd']);
-//        Route::get('/test', [\App\Http\Controllers\MembersController::class, 'testEnd'])->name('just');
-//        //System user Endpoints
-//        Route::post('/login', [\App\Http\Controllers\MembersController::class, 'memberLogin'])->name('memberLogin');
-//    });
 
 //////
 Route::group(['prefix' => 'v1'], function () {
     ///Members
     Route::post('/memberlogin', [\App\Http\Controllers\MembersController::class, 'memberLogin'])->name('memberLogin');
     Route::post('/memberregister', [\App\Http\Controllers\MembersController::class, 'membersRegistration']);
+    Route::get('/allmember', [\App\Http\Controllers\MembersController::class, 'index']);
+
     //TODO: implement route to allow member to update occupation ID when he/she need and keep record in timelineTable
+
     ///Skills
     Route::get('/skills',[\App\Http\Controllers\SkillsController::class,'index'])->name('allSkills');
     ///users
@@ -47,22 +34,24 @@ Route::group(['prefix' => 'v1'], function () {
 });
 //////secured_Members_endpoint
 Route::group(['middleware' => \App\Http\Middleware\AuthenticateMembers::class, 'prefix' => 'v1'], function () {
-    Route::get('/allmember', [\App\Http\Controllers\MembersController::class, 'index']);
+//    Route::get('/allmember', [\App\Http\Controllers\MembersController::class, 'index']);
     Route::post('/memberlogout', [\App\Http\Controllers\MembersController::class, 'memberLogout'])->name('memberLogout');
 });
+Route::patch('/v1/members/{memberId}',[\App\Http\Controllers\MembersController::class,'update'])->name('memberUpdate');
+
 /////secured_Users_endpoint
 Route::group(['middleware' => \App\Http\Middleware\Authenticate::class, 'prefix' => 'v1'], function () {
     Route::post('/user', [\App\Http\Controllers\UsersController::class, 'userDetails']);
     Route::post('/userlogout', [\App\Http\Controllers\UsersController::class, 'usersLogout'])->name('usersLogout');
     ///Skills
     Route::post('/skills',[\App\Http\Controllers\SkillsController::class,'store'])->name('addSkill');
-    Route::patch('/skills',[\App\Http\Controllers\SkillsController::class,'update'])->name('updateSkill');
+    Route::patch('/skills/{skillId}',[\App\Http\Controllers\SkillsController::class,'update'])->name('updateSkill');
 });
 
 Route::view(
     'memberlogin', 'memberlogin'
 )->name('memberlogin_');
-Route::get('/tt', function (){return "samaki";})->name('tt');
+Route::get('/tt', function (){return "you dont have right token for this";})->name('tt');
 
 
 
