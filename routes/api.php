@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-//////
+//////,'middleware'=> \App\Http\Middleware\Cors::class
 Route::group(['prefix' => 'v1'], function () {
     ///Members
     Route::post('/memberlogin', [\App\Http\Controllers\MembersController::class, 'memberLogin'])->name('memberLogin');
@@ -36,8 +36,9 @@ Route::group(['prefix' => 'v1'], function () {
 Route::group(['middleware' => \App\Http\Middleware\AuthenticateMembers::class, 'prefix' => 'v1'], function () {
 //    Route::get('/allmember', [\App\Http\Controllers\MembersController::class, 'index']);
     Route::post('/memberlogout', [\App\Http\Controllers\MembersController::class, 'memberLogout'])->name('memberLogout');
+    Route::patch('/members/{memberId}',[\App\Http\Controllers\MembersController::class,'update'])->name('memberUpdate');
+
 });
-Route::patch('/v1/members/{memberId}',[\App\Http\Controllers\MembersController::class,'update'])->name('memberUpdate');
 
 /////secured_Users_endpoint
 Route::group(['middleware' => \App\Http\Middleware\Authenticate::class, 'prefix' => 'v1'], function () {

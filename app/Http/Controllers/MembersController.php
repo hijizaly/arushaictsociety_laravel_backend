@@ -131,9 +131,10 @@ class MembersController extends Controller
         $skillId=$newMemberUpdate['occupation_id'];
         $skill=Skills::find($skillId);
 
-//        echo $skill['name'];
+//        echo $skillId;
         $newMemberUpdate=$newMemberUpdate['occupation_id']=$skill['name'];
         echo $newMemberUpdate;
+//        dd($newMemberUpdate);
 //        return new MembersResource($newMemberUpdate);
     }
 
