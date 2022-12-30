@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreMembersRequest;
-use App\Http\Requests\UpdateMembersRequest;
-use App\Http\Resources\MembersResource;
-use App\Http\Resources\SkillsResource;
-use App\Models\Members;
+use App\Http\Requests\{StoreMembersRequest, UpdateMembersRequest};
+use App\Http\Resources\{MembersResource, SkillsResource};
+use App\Models\{Members, MemberTimeline};
+
 //use http\Env\Request;
-use App\Models\Skills;
-use http\Env\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 
@@ -56,12 +53,15 @@ class MembersController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index()
     {
-        //
-        return MembersResource::collection(members::all());
+        $allMembers=members::all();
+//        print_r($allMembers['occupation_id']);
+
+        return MembersResource::collection($allMembers);
+
 
     }
 
@@ -113,29 +113,49 @@ class MembersController extends Controller
      *
      * @param  \App\Http\Requests\UpdateMembersRequest  $request
      * @param  \App\Models\Members  $members
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(UpdateMembersRequest $request, Members $members,$id)
     {
-        $newMemberUpdate= Members::find($id);
-        $newMemberUpdate->update([
-            'name'=>$request->name,
-            'email'=>$request->email,
-            'address'=>$request->address,
-            'dob'=>$request->dob,
-            'status'=>$request->status,
-            'occupation_id'=>$request->occupation_id,
-            'role'=>$request->role,
-            'phoneNumber'=>$request->phone
-        ]);
-        $skillId=$newMemberUpdate['occupation_id'];
-        $skill=Skills::find($skillId);
+        $payload = auth()->payload();
+//        dd($payload->toArray());
 
-//        echo $skillId;
-        $newMemberUpdate=$newMemberUpdate['occupation_id']=$skill['name'];
-        echo $newMemberUpdate;
-//        dd($newMemberUpdate);
-//        return new MembersResource($newMemberUpdate);
+        if($payload('id') != $id){
+            return \response()->json(['message'=>'Wrong Members Id 👋🏼']);
+        }else{
+            $oldMemberUpdate= Members::find($id);
+            if($oldMemberUpdate['occupation_id']==$request->occupation_id){
+                $oldMemberUpdate->update([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'address' => $request->address,
+                    'dob' => $request->dob,
+                    'status' => $request->status,
+                    'occupation_id' => $request->occupation_id,
+                    'role' => $request->role,
+                    'phoneNumber' => $request->phone
+                ]);
+            }else{
+                $oldMemberUpdate->update([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'address' => $request->address,
+                    'dob' => $request->dob,
+                    'status' => $request->status,
+                    'occupation_id' => $request->occupation_id,
+                    'role' => $request->role,
+                    'phoneNumber' => $request->phone
+                ]);
+                $membersSkillUpdateTimeline = MemberTimeline::create([
+                    'member_id' => $oldMemberUpdate['id'],
+                    'old_occupation_id'=>$oldMemberUpdate['occupation_id'],
+                    'new_occupation_id'=>$request->occupation_id
+                ]);
+            }
+
+            return new MembersResource($oldMemberUpdate);
+
+        }
     }
 
     /**
