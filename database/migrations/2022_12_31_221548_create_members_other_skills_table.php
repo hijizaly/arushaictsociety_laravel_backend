@@ -13,14 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('member_timelines', function (Blueprint $table) {
-            $table->id()->autoIncrement();
+        Schema::create('members_other_skills', function (Blueprint $table) {
+            $table->id();
             $table->unsignedBigInteger('member_id');
-            $table->unsignedBigInteger('old_occupation_id')->nullable();
-            $table->unsignedBigInteger('new_occupation_id');
+            $table->unsignedBigInteger('other_occupation_id');
             $table->foreign('member_id')->references('id')->on('members')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('old_occupation_id')->references('id')->on('skills')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('new_occupation_id')->references('id')->on('skills')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('other_occupation_id')->references('id')->on('skills')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }
@@ -32,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('member_timelines');
+        Schema::dropIfExists('members_other_skills');
     }
 };

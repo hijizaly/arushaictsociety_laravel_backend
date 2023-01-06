@@ -20,11 +20,20 @@ class MemberTimelineController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return bool
      */
-    public function create()
+    public function create($memberId,$new_occupation_id,$old_occupation_id=null)
     {
-        //
+        $membersSkillUpdateTimeline = MemberTimeline::create([
+            'member_id' => $memberId,
+            'old_occupation_id'=>$old_occupation_id,
+//            'old_occupation_id'=>(empty($old_occupation_id))? null : $old_occupation_id,
+            'new_occupation_id'=>$new_occupation_id
+        ]);
+        if($membersSkillUpdateTimeline){
+            return true;
+        }else return false;
+
     }
 
     /**
@@ -81,5 +90,14 @@ class MemberTimelineController extends Controller
     public function destroy(MemberTimeline $memberTimeline)
     {
         //
+
+    }
+
+    public function removeOtherSkills($memberId,$skillId)
+    {
+        $ifTheyExisted = MemberTimeline::where('member_id',$memberId)->where('new_occupation_id',$skillId)->first();
+        if(!empty($ifTheyExisted)){
+            $ifTheyExisted->delete();
+        }
     }
 }

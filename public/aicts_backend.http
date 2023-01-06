@@ -1,0 +1,60 @@
+###
+POST http://localhost:8000/api/v1/memberlogin
+Content-Type: application/json
+#Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL3YxL21lbWJlcmxvZ2luIiwiaWF0IjoxNjcyODA2NjcyLCJleHAiOjE2NzI4MTAyNzIsIm5iZiI6MTY3MjgwNjY3MiwianRpIjoibUd2MGlQaldIcGVXQVBoUCIsInN1YiI6IjIiLCJwcnYiOiJjYjc4YjVlMWZmY2UwZjgzMWQwMjMxZGYyYzhiZDdjODA2NDc3NzYyIiwiYWNjb3VudFR5cGUiOiJtZW1iZXIiLCJpZCI6MiwibmFtZSI6Ikhpaml6YWx5IiwiZW1haWwiOiJoaWppemFsQGdtYWlsLmNvbSIsInBob25lTnVtYmVyIjoiMDc1NjIyNjkwNiIsInN0YXR1cyI6MCwicm9sZSI6Im51bGwiLCJvY2N1cGF0aW9uX2lkIjoyfQ.gasotaBMoguJQundLyJblGR7--SMnk9uvFqIOqNpTGY
+
+{
+    "email":"hijizal@gmail.com",
+    "password":"123456"
+}
+> {% client.global.set("accessToken", JSON.parse(JSON.stringify(response.body)).accessToken);%}
+
+###
+
+POST http://localhost:8000/api/v1/memberlogout
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+
+###
+
+GET http://localhost:8000/api/v1/allmember
+Accept: application/json
+Authorization: Bearer {{accessToken}}
+
+####
+
+GET http://localhost:8000/api/v1/members/2
+Accept: application/json
+Authorization: Bearer {{accessToken}}
+
+###
+
+
+POST http://localhost:8000/api/v1/otherskills
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+    "occupation_id":["1","2","5"]
+}
+
+###
+
+DELETE http://localhost:8000/api/v1/otherskills
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+    "occupation_id":["1","2","5"]
+}
+
+###all member other skills
+
+
+GET http://localhost:8000/api/v1/otherskills
+Accept: application/json
+Authorization: Bearer {{accessToken}}
+
+###
+

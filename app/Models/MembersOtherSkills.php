@@ -4,13 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
-class memberSkills extends Model
+class MembersOtherSkills extends Model
 {
-    use HasFactory;
-
+    use HasApiTokens, HasFactory, Notifiable;
     protected $fillable=[
-        'members_id',
+        'member_id',
         'other_occupation_id'
     ];
 }
