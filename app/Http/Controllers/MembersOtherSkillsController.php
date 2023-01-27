@@ -44,6 +44,7 @@ class MembersOtherSkillsController extends Controller
         $targetSkill = Skills::findMany($request->occupation_id);
 
 
+//        return \response()->json($request);
 
 
         function otherSkillsCreate($eachOccupationId)
@@ -70,6 +71,7 @@ class MembersOtherSkillsController extends Controller
                 }
             } else {
                 return \response()->json(['message' => 'Skills Id\'s Must be An Array 👋🏼']);
+
             }
             return MembersOtherSkillsResource::collection($arrayOfResults);
         }

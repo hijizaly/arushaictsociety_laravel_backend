@@ -25,8 +25,9 @@ class MembersResource extends JsonResource
             'member_fullname'=>$this->name,
             'member_email'=>$this->email,
             'member_phone'=>$this->phoneNumber,
+//            'occupation_id'
             'occupation'=>Skills::find($this->occupation_id)['name'],
-            'date Of birth'=>$this->dob,
+            'dob'=>$this->dob,
             'other_skills'=>$otherSkills
         ];
 

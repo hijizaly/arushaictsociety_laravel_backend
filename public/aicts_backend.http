@@ -36,7 +36,7 @@ Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
-    "occupation_id":["1","2","5"]
+    "occupation_id":["1","2","5","4"]
 }
 
 ###
@@ -55,6 +55,57 @@ Authorization: Bearer {{accessToken}}
 GET http://localhost:8000/api/v1/otherskills
 Accept: application/json
 Authorization: Bearer {{accessToken}}
+
+###
+
+GET http://localhost:8000/api/v1/timeline
+Accept: application/json
+Authorization: Bearer {{accessToken}}
+
+
+###
+
+
+PATCH http://localhost:8000/api/v1/members/2
+Accept: application/json
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+
+{
+    "name":"Hijizaly",
+	"email":"hijizal@gmail.com",
+	"address":"Sakina, Arusha",
+	"dob":"1999-2-2",
+	"status":"0",
+	"occupation_id":"2",
+	"role":"null",
+	"phone":"0756226906",
+}
+
+###
+
+POST http://localhost:8000/api/v1/changepassword
+Accept: application/json
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+"oldpassword":"123",
+"newpassword":"123"
+}
+
+###
+
+POST http://localhost:8000/api/v1/forgetpassword
+Accept: application/json
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+"email":"hijizal@gmail.com"
+}
+
 
 ###
 

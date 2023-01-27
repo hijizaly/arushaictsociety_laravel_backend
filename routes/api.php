@@ -30,6 +30,9 @@ Route::group(['prefix' => 'v1'], function () {
     ///users
     Route::post('/userlogin', [\App\Http\Controllers\UsersController::class, 'userLogin'])->name('userLogin');
     Route::post('/userregister', [\App\Http\Controllers\UsersController::class, 'usersRegistration']);
+    Route::post('/forgetpassword',[\App\Http\Controllers\MembersController::class,'passwordforget'])->name('membersPasswordReset');
+    Route::post('/forgetpassword/{hashUrl}',[\App\Http\Controllers\MembersController::class,'passwordreseter']);
+
 
 
 });
@@ -40,9 +43,12 @@ Route::group(['middleware' => \App\Http\Middleware\AuthenticateMembers::class, '
     Route::patch('/members/{memberId}',[\App\Http\Controllers\MembersController::class,'update'])->name('memberUpdate');
     Route::get('/members/{memberId}',[\App\Http\Controllers\MembersController::class,'show'])->name('membersDetails');
 
+    Route::get('/timeline',[\App\Http\Controllers\MemberTimelineController::class,'index'])->name('membersTimeline');
+
     Route::post('/otherskills',[\App\Http\Controllers\MembersOtherSkillsController::class,'create'])->name('createMemberOtherSkills');
     Route::delete('/otherskills',[\App\Http\Controllers\MembersOtherSkillsController::class,'destroy'])->name('deleteMemberOtherSkills');
     Route::get('/otherskills',[App\Http\Controllers\MembersOtherSkillsController::class,'index'])->name('memberAllOtherSkills');
+    Route::post('/changepassword',[\App\Http\Controllers\MembersController::class,'passwordchange'])->name('membersPasswordChange');
 
 });
 

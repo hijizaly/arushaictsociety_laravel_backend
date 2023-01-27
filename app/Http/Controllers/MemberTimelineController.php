@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\MemberTimelineResource;
 use App\Models\MemberTimeline;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,17 @@ class MemberTimelineController extends Controller
      */
     public function index()
     {
-        //
+        $memberId = auth()->payload()('id');
+        $allMemberTimeline=MemberTimeline::where('member_id',$memberId)->orderBy('created_at','DESC')->get();
+
+
+
+
+//        return \response()->json(['m'=>$allMemberTimeline]);
+
+        return MemberTimelineResource::collection($allMemberTimeline);
+
+
     }
 
     /**
