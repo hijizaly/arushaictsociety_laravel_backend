@@ -52,11 +52,6 @@ class MembersController extends Controller
         return response()->json(['message' => 'login successfully', 'accessToken' => $token]);
     }
 
-    public function me()
-    {
-        return response()->json(auth()->guard('members-api')->user());
-    }
-
     public function memberLogout()
     {
         auth()->guard('members-api')->logout();
@@ -90,16 +85,16 @@ class MembersController extends Controller
         return \response()->json(['data' => \request()]);
 
     }
+
     public function passwordforget(Request $request)
     {
+        $memberDetailes = Members::where('email', $request['email'])->first();
 
-        $memberDetailes = Members::where('email',$request['email'])->first();
-
-        if(empty($memberDetailes)){
-            return response(['message'=>'Wrong Email Or Sign Up'])->setStatusCode(404);
-        }else{
-            $data_=['memberID'=>$memberDetailes['id'],'email'=>$memberDetailes['email']];
-        $resetCodeStore=App('App\Http\Controllers\ResetCodePasswordController')->create($data_);
+        if (empty($memberDetailes)) {
+            return response(['message' => 'Wrong Email Or Sign Up'])->setStatusCode(404);
+        } else {
+            $data_ = ['memberID' => $memberDetailes['id'], 'email' => $memberDetailes['email']];
+            $resetCodeStore = App('App\Http\Controllers\ResetCodePasswordController')->create($data_);
 //        return response($resetCodeStore);//debugger
             if ($resetCodeStore != null) {
                 try {
@@ -111,10 +106,39 @@ class MembersController extends Controller
                     return response(['message' => 'Sorry!!! Something went wrong & Email Failed to sending'])->setStatusCode(403);
                 }
             } else {
-                return response(['message' => 'email is already sent to your email (' . $data_['email'] . ') account. maybe check you spam folder for email or try after 45 min','data'=>$resetCodeStore]);
+                return response(['message' => 'email is already sent to your email (' . $data_['email'] . ') account. maybe check you spam folder for email or try after 45 min', 'data' => $resetCodeStore]);
             }
         }
 //
+    }
+
+    public function passwordreseter(Request $request, $urlId)
+    {
+        $finalResult = [];
+        $urlId_ = explode('y', $urlId);
+        $final = App('App\Http\Controllers\ResetCodePasswordController')->resetPassword($urlId, $request['secrete_code']);
+
+        if ($final['status']) {
+//            echo(base64_decode($request['payload']));
+            $newPassword = Hash::make(base64_decode($request['payload']));
+            $passwordReplace = Members::find($urlId_[0]);
+            if ($passwordReplace['id'] == $urlId_[0]) {
+                $passwordReplace->update([
+                    'password' => $newPassword,
+                ]);
+                $finalResult['message'] = "Password changed successfully Produced with Login";
+                $finalResult['status'] = $final;
+                $finalResult['data'] = new MembersResource($passwordReplace);
+
+                return response()->json($finalResult);
+            }
+
+        } else {
+            return $final;
+
+        }
+//        return response()->json($final);
+
     }
 
     /**

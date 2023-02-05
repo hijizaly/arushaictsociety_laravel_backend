@@ -106,9 +106,11 @@ class MemberTimelineController extends Controller
 
     public function removeOtherSkills($memberId,$skillId)
     {
-        $ifTheyExisted = MemberTimeline::where('member_id',$memberId)->where('new_occupation_id',$skillId)->first();
-        if(!empty($ifTheyExisted)){
-            $ifTheyExisted->delete();
-        }
+
+//        $ifTheyExisted = MemberTimeline::where('member_id',$memberId)->where('new_occupation_id',$skillId)->delete();
+        MemberTimeline::where('member_id',$memberId)->where('new_occupation_id',$skillId)->delete();
+//        if(!empty($ifTheyExisted)){
+//            $ifTheyExisted->delete();
+//        }
     }
 }

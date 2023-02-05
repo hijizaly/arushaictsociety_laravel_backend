@@ -20,7 +20,7 @@ Route::group(['prefix' => 'v1'], function () {
     ///Members
     Route::post('/memberlogin', [\App\Http\Controllers\MembersController::class, 'memberLogin'])->name('memberLogin');
     Route::post('/memberregister', [\App\Http\Controllers\MembersController::class, 'membersRegistration']);
-//    Route::get('/allmember', [\App\Http\Controllers\MembersController::class, 'index']);
+    Route::get('/allmember', [\App\Http\Controllers\MembersController::class, 'index']);
     Route::get('/unauthorized',[\App\Http\Controllers\MembersController::class,'unauthorized'])->name('unauthorized');
 
     //TODO: implement route to allow member to update occupation ID when he/she need and keep record in timelineTable
@@ -38,14 +38,15 @@ Route::group(['prefix' => 'v1'], function () {
 });
 //////secured_Members_endpoint
 Route::group(['middleware' => \App\Http\Middleware\AuthenticateMembers::class, 'prefix' => 'v1'], function () {
-    Route::get('/allmember', [\App\Http\Controllers\MembersController::class, 'index'])->name('allMembersRegistered');
+//    Route::get('/allmember', [\App\Http\Controllers\MembersController::class, 'index'])->name('allMembersRegistered');
     Route::post('/memberlogout', [\App\Http\Controllers\MembersController::class, 'memberLogout'])->name('memberLogout');
     Route::patch('/members/{memberId}',[\App\Http\Controllers\MembersController::class,'update'])->name('memberUpdate');
     Route::get('/members/{memberId}',[\App\Http\Controllers\MembersController::class,'show'])->name('membersDetails');
 
     Route::get('/timeline',[\App\Http\Controllers\MemberTimelineController::class,'index'])->name('membersTimeline');
 
-    Route::post('/otherskills',[\App\Http\Controllers\MembersOtherSkillsController::class,'create'])->name('createMemberOtherSkills');
+//    Route::post('/otherskills',[\App\Http\Controllers\MembersOtherSkillsController::class,'create'])->name('createMemberOtherSkills');
+    Route::post('/otherskills',[\App\Http\Controllers\MembersOtherSkillsController::class,'update'])->name('updateMemberOtherSkills');
     Route::delete('/otherskills',[\App\Http\Controllers\MembersOtherSkillsController::class,'destroy'])->name('deleteMemberOtherSkills');
     Route::get('/otherskills',[App\Http\Controllers\MembersOtherSkillsController::class,'index'])->name('memberAllOtherSkills');
     Route::post('/changepassword',[\App\Http\Controllers\MembersController::class,'passwordchange'])->name('membersPasswordChange');

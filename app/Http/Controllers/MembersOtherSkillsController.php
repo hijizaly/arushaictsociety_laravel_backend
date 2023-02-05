@@ -43,7 +43,7 @@ class MembersOtherSkillsController extends Controller
 //        $targetSkill = Skills::all();
         $targetSkill = Skills::findMany($request->occupation_id);
 
-
+//            dd($request);
 //        return \response()->json($request);
 
 
@@ -57,7 +57,7 @@ class MembersOtherSkillsController extends Controller
             return $newOtherSkills;
         }
 
-        if (count($targetSkill)!=count($request->occupation_id)) {
+        if (count($targetSkill) != count($request->occupation_id)) {
             return \response()->json(['message' => 'Some of Skills Id\'s is Wrong👋🏼']);
         } else {
             if (is_array($request->occupation_id)) {
@@ -107,8 +107,10 @@ class MembersOtherSkillsController extends Controller
      */
     public function edit(MembersOtherSkills $membersOtherSkills)
     {
+
         //
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -117,10 +119,59 @@ class MembersOtherSkillsController extends Controller
      * @param \App\Models\MembersOtherSkills $membersOtherSkills
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateMembersOtherSkillsRequest $request, MembersOtherSkills $membersOtherSkills)
+    public function update_(UpdateMembersOtherSkillsRequest $request, MembersOtherSkills $membersOtherSkills)
     {
         //
+        return \response()->json($request);
 
+
+    }
+
+    public function update(Request $request)
+    {
+        $newOccupationId = array_unique($request->occupation_id);
+        function otherSkillsCreate($eachOccupationId)
+        {
+            $newOtherSkills = MembersOtherSkills::create([
+                'member_id' => auth()->payload()('id'),
+                'other_occupation_id' => $eachOccupationId
+            ]);
+            App('App\Http\Controllers\MemberTimelineController')->create(auth()->payload()('id'), $eachOccupationId);
+            return $newOtherSkills;
+        }
+        function otherSkillsDestroy($eachOccupationId)
+        {
+            $newOtherSkills = MembersOtherSkills::destroy($eachOccupationId);
+            App('App\Http\Controllers\MemberTimelineController')->removeOtherSkills(auth()->payload()('id'), $eachOccupationId);
+            return $newOtherSkills;
+        }
+
+        if (is_array($newOccupationId)) {
+            $allSkill = Skills::findMany($newOccupationId);
+
+            if (count($allSkill) != count($newOccupationId)) {
+                return \response()->json(['message' => 'Some of Skills Id\'s is Wrong👋🏼']);
+            } else {
+
+                $otherSkillAvailable = MembersOtherSkills::where('member_id', auth()->payload()('id'))->get();
+
+                foreach ($otherSkillAvailable as $eachOtherSkillAvailable) {
+                    if (in_array($eachOtherSkillAvailable['other_occupation_id'], $newOccupationId)) {
+
+                    } else {
+                        otherSkillsDestroy($eachOtherSkillAvailable['id']);
+                    }
+                    unset($newOccupationId[array_search($eachOtherSkillAvailable['other_occupation_id'], $newOccupationId)]);
+                }
+                foreach ($newOccupationId as $eachNewOccupationId) {
+                    otherSkillsCreate($eachNewOccupationId);
+                }
+                $arrayOfResults=MembersOtherSkills::where('member_id', auth()->payload()('id'))->get();
+                return \response()->json(['data' => $arrayOfResults]);
+            }
+        } else {
+            return \response()->json(['message' => 'Skills Id\'s Must be An Array 👋🏼']);
+        }
     }
 
     /**
@@ -138,7 +189,7 @@ class MembersOtherSkillsController extends Controller
         $memberId = auth()->payload()('id');
 
 
-        if (count($targetSkill)!=count($request->occupation_id)) {
+        if (count($targetSkill) != count($request->occupation_id)) {
             return \response()->json(['message' => 'Wrong Skill Id 👋🏼']);
         } else {
             if (is_array($request->occupation_id)) {
@@ -158,7 +209,6 @@ class MembersOtherSkillsController extends Controller
             }
             return \response()->json(['data' => $arrayOfResults]);
 //            return MembersOtherSkillsResource::collection($arrayOfResults);
-
         }
     }
 }

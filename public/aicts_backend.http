@@ -36,7 +36,7 @@ Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
-    "occupation_id":["1","2","5","4"]
+    "occupation_id":["1","2","5","3"]
 }
 
 ###
@@ -108,4 +108,15 @@ Content-Type: application/json
 
 
 ###
+
+#POST http://localhost:8000/api/v1/forgetpassword/2ybdb858710a5bbf033b5276219ba40ae256be0e020a217d8a3ee05193f7f56be7
+POST http://localhost:8000/api/v1/forgetpassword/2y6d50fedf7557b2f57281723d1bccd7b1a083532cc2a73c1387826fd3e2af9243
+Accept: application/json
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+    "secrete_code":"964616",
+    "payload": "newnewnew"
+}
 
