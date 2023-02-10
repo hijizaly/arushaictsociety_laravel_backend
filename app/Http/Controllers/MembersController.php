@@ -98,6 +98,7 @@ class MembersController extends Controller
 //        return response($resetCodeStore);//debugger
             if ($resetCodeStore != null) {
                 try {
+                    $data_['email'] = 'noreply@arushaictsociety.or.tz';//TODO DELETE THIS
                     Mail::to($data_['email'])->send(new PasswordResetMail($resetCodeStore['code']));
                     return response(['message' => 'email with Reset Code sent in your ' . $data_["email"], 'data' => (['email' => $data_['email'], 'urlId' => $resetCodeStore['url']])]);
 
