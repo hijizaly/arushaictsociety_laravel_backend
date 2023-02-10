@@ -1,4 +1,13 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<p align="center">
+
+[comment]: <> (<a href="https://laravel.com" target="_blank">)
+
+<img src="https://github.com/hijizaly/arushaictsociety_laravel_backend/blob/master/public/aictslogo.png" width="400" >
+
+[comment]: <> (![Arusha ICT Society]&#40;https://github.com/hijizaly/arushaictsociety_laravel_backend/blob/master/public/aictslogo.pngraw=true&#41;)
+
+[comment]: <> (</a>)
+</p>
 
 
 
