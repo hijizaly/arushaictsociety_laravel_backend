@@ -23,7 +23,9 @@ class MembersController extends Controller
 {
     public function membersRegistration(Request $request)
     {
-//        dd($request);
+        $isEmailExistence=Members::where('email',$request['email'])->first();
+        if(empty($isEmailExistence)){
+
         $newMember = Members::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -40,6 +42,8 @@ class MembersController extends Controller
         } else {
             return response()->json(['status' => false]);
         }
+    } return response(['message'=>'Email is already used','status'=>false]);
+
     }
 
     public function memberLogin(Request $request)
@@ -111,6 +115,12 @@ class MembersController extends Controller
             }
         }
 //
+    }
+    public function emailExistenceCheck(Request $request){
+        $isEmailExistence=Members::where('email',$request['email'])->first();
+        if(!empty($isEmailExistence)){
+            return response(['message'=>'email is already used','status'=>true]);
+        }            return response(['status'=>false]);
     }
 
     public function passwordreseter(Request $request, $urlId)

@@ -28,10 +28,11 @@ Route::group(['prefix' => 'v1'], function () {
     ///Skills
     Route::get('/skills',[\App\Http\Controllers\SkillsController::class,'index'])->name('allSkills');
     ///users
-    Route::post('/userlogin', [\App\Http\Controllers\UsersController::class, 'userLogin'])->name('userLogin');
+    Route::post('/adminlogin', [\App\Http\Controllers\UsersController::class, 'userLogin'])->name('userLogin');
     Route::post('/userregister', [\App\Http\Controllers\UsersController::class, 'usersRegistration']);
     Route::post('/forgetpassword',[\App\Http\Controllers\MembersController::class,'passwordforget'])->name('membersPasswordReset');
     Route::post('/forgetpassword/{hashUrl}',[\App\Http\Controllers\MembersController::class,'passwordreseter']);
+    Route::post('/emailexistence',[\App\Http\Controllers\MembersController::class,'emailExistenceCheck'])->name('emailExistenceCheck');
 
 
 
@@ -53,13 +54,15 @@ Route::group(['middleware' => \App\Http\Middleware\AuthenticateMembers::class, '
 
 });
 
-/////secured_Users_endpoint
+/////secured_Admin_endpoint
 Route::group(['middleware' => \App\Http\Middleware\Authenticate::class, 'prefix' => 'v1'], function () {
-    Route::post('/user', [\App\Http\Controllers\UsersController::class, 'userDetails']);
-    Route::post('/userlogout', [\App\Http\Controllers\UsersController::class, 'usersLogout'])->name('usersLogout');
+    Route::post('/admin', [\App\Http\Controllers\UsersController::class, 'userDetails']);
+    Route::post('/adminlogout', [\App\Http\Controllers\UsersController::class, 'usersLogout'])->name('usersLogout');
     ///Skills
     Route::post('/skills',[\App\Http\Controllers\SkillsController::class,'store'])->name('addSkill');
     Route::patch('/skills/{skillId}',[\App\Http\Controllers\SkillsController::class,'update'])->name('updateSkill');
+    //Members Management
+    //Content
 });
 
 Route::view(
