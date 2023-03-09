@@ -33,6 +33,13 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('/forgetpassword',[\App\Http\Controllers\MembersController::class,'passwordforget'])->name('membersPasswordReset');
     Route::post('/forgetpassword/{hashUrl}',[\App\Http\Controllers\MembersController::class,'passwordreseter']);
     Route::post('/emailexistence',[\App\Http\Controllers\MembersController::class,'emailExistenceCheck'])->name('emailExistenceCheck');
+    //contents
+    Route::get('/contents',[\App\Http\Controllers\ContentsController::class,'index'])->name('allContents');
+    Route::get('/contentsIds',[\App\Http\Controllers\ContentsController::class,'allContentsIds'])->name('allContentsIds');
+    Route::get('/contents/{contentId}',[\App\Http\Controllers\ContentsController::class,'eachContent'])->name('eachContentsIds');
+    //TODO it Here Tempo just move into secure area
+    Route::post('/contents',[\App\Http\Controllers\ContentsController::class,'createContents'])->name('storeContents');
+
 
 
 
@@ -63,6 +70,7 @@ Route::group(['middleware' => \App\Http\Middleware\Authenticate::class, 'prefix'
     Route::patch('/skills/{skillId}',[\App\Http\Controllers\SkillsController::class,'update'])->name('updateSkill');
     //Members Management
     //Content
+
 });
 
 Route::view(

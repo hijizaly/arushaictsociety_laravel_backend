@@ -60,8 +60,3 @@ class Members extends Authenticatable implements JWTSubject
         // TODO: Implement getJWTCustomClaims() method.
     }
 }
-//oldOne
-//class Members extends Model
-//{
-//    use HasFactory;
-//}

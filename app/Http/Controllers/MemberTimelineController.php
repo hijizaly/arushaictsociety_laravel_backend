@@ -18,13 +18,7 @@ class MemberTimelineController extends Controller
         $memberId = auth()->payload()('id');
         $allMemberTimeline=MemberTimeline::where('member_id',$memberId)->orderBy('created_at','DESC')->get();
 
-
-
-
-//        return \response()->json(['m'=>$allMemberTimeline]);
-
         return MemberTimelineResource::collection($allMemberTimeline);
-
 
     }
 
