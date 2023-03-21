@@ -35,26 +35,30 @@ class ContentsController extends Controller
 
 //        $allContentUploaded = Contents::all(['component_id', 'id']);
         $allContentUploaded = ContentType::all();
+        $v1=[];
         foreach ($allContentUploaded as $eachIds){
+//            echo($eachIds['comp_id'][0]);
 
-//            $eachMain[]=$eachIds['main_comp_id'];
-//            array_push($compoGroup,$eachIds['comp_id']);
+            if(!in_array($eachIds['main_comp_id'],$v1)){
+
+//                echo $eachIds['main_comp_id'];
+                $eachCompChild=ContentType::where('main_comp_id',$eachIds['main_comp_id'])->get();
+//                ContentType::where
+//                echo($eachCompChild);
+                $eachChildArray=[];
+                foreach ($eachCompChild as $eachChild){
+//                    echo $eachChild['comp_id'];
+                    array_push($eachChildArray,$eachChild['comp_id']);
+                }//TODO:finish something here...
 
 
-            $eachComp = Contents::where('component_id',$eachIds['comp_id'])->get();
-//            echo $eachIds['comp_id'];
-//            echo $eachIds['main_comp_id'];
-            echo $eachComp;
-//            array_push($finalObj,$eachIds['main_comp_id']['child']='somethin');
-//            if(!in_array($eachIds['main_comp_id'],$finalObj)){
-//                array_push($finalObj,$eachIds['main_comp_id']);
-//            }
-            array_push($finalObj,$eachComp);
+                array_push($v1,$eachIds['main_comp_id']);
+//                array_push($v1,$eachChildArray);
+            }
         }
-//        $finalObj = array_unique($finalObj,SORT_STRING);
-        return \response()->json(['message'=>'ala','data'=>$finalObj]);
 
-//        return \response()->json(['message' => "all Contents Ids", 'data' => $allContentUploaded]);
+
+        return \response()->json(['message' => "all Contents Ids", 'data' => $v1]);
     }
 
 
@@ -102,10 +106,6 @@ class ContentsController extends Controller
 
                     }
                 }
-//            }else{
-//
-//
-//            }
 
         }else{
             $newContent = Contents::create([
@@ -165,8 +165,8 @@ class ContentsController extends Controller
 
     public function eachContent($contentId)
     {
-        $eachContent = Contents::find($contentId);
-        return new ContentsResource($eachContent);
+        $eachContent = Contents::where('component_id','LIKE',$contentId.'%')->get();
+        return ContentsResource::collection($eachContent);
     }
 
 

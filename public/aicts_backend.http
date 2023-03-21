@@ -149,9 +149,9 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "contentHead": "Find a better place for Learn as Journal developer steps.",
-    "contentBody": "Arcu tortor, purus in mattis at sed integer faucibus. Aliquet quis aliquet eget mauris tortor.ç Aliquet ultrices ac, ametau...",
-    "contentType": "B1"
+    "contentHead": "B4",
+    "contentBody": "B4Contents",
+    "contentType": "B4"
 }
 
 ###
@@ -165,7 +165,7 @@ Accept: application/json
 Content-Type: application/json
 
 ###
-GET http://localhost:8000/api/v1/contents/4
+GET http://localhost:8000/api/v1/contents/A
 Accept: application/json
 Content-Type: application/json
 
